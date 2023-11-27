@@ -1,0 +1,34 @@
+
+
+
+
+
+
+12:02
+// dom ready
+window.addEventListener('DOMContentLoaded', () => {
+
+    initiateScripts();
+    // check to see if there is at least 1 YT player on page
+    const ytExists = $q1('.alp-video-wrapper.has-video');
+    // if so - inject the YT API
+    if(ytExists) {
+        // YouTube API stuff - this needs to be kicked off as soon as possible and injects YT
+        let tag = document.createElement("script");
+        tag.src = "//www.youtube.com/iframe_api";
+        let firstScriptTag = document.getElementsByTagName("script")[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+
+});
+
+window.addEventListener('load', ()=> {
+
+});
+
+
+window.onYouTubeIframeAPIReady = function() {
+    // if we have YT videos on page, we need to set-up the players via the videoControls Module
+    videoControls();
+};

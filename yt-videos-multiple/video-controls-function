@@ -1,0 +1,110 @@
+import { $q1, $qall,addClassN, removeClassN } from '@js/utility-scripts/domHelpers';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
+function videoControls () {
+    // array for the YT players to be pushed for later looping through to control playback
+    let playersArray = [];
+
+    // function to genrate a player
+    // pass in the YT video ID, and the ID of the element that you want to be the YT video to be injected into
+    function generatePlayers(ytVideoId,playerContainerId) {
+        let player = new YT.Player(playerContainerId, {
+            //height: '390',
+            //width: '640',
+            videoId: ytVideoId,
+            events: {
+                //'onReady': onPlayerReady,
+                //'onStateChange': onPlayerStateChange
+            }
+        });
+
+        // push the player into the players array
+        playersArray.push(player);
+        // return the player so that it can be used to trigger events etc
+        return player;
+    }
+
+    // function to stop any other videos when a video is clicked
+    function stopOtherVideos () {
+       for(let i =0; i < playersArray.length; i++) {
+                 playersArray[i].pauseVideo();
+         }
+    }
+
+    // we getall of the items here
+    const videoItems = $qall('.alp-video-wrapper.has-video');
+
+    // then loop through
+    videoItems.forEach((videoWrapper, index) => {
+
+        // set up the dom elements we need
+        const videoEl = $q1('.alp-yt-el', videoWrapper);
+        const videoId = videoEl.parentNode.dataset.videoId;
+        const playerId = videoEl.getAttribute('id');
+        const playBtn = $q1('.alp-video-play-pause-wrap', videoWrapper);
+
+        // generate a player for this particular element
+        let elPlayer = generatePlayers(videoId, playerId);
+
+        // set up the play btn
+        playBtn.addEventListener('click', () => {
+            stopOtherVideos();
+            elPlayer.playVideo();
+            addClassN(playBtn, 'is-playing');
+        });
+        // listen for state change on the player
+        // if this is equal to 2 ( paused) - we make the faux play btn visible again
+        elPlayer.addEventListener('onStateChange', (event) => {
+                    if(event.data === 2) {
+                        removeClassN(playBtn, 'is-playing');
+                    }
+         });
+        // dropping a simple scroll trigger here - when we leave the element, we will pause the video again
+        ScrollTrigger.create({
+            trigger: videoWrapper,
+            //endTrigger : videoEl,
+            start: "top 0",
+            end: "bottom 80%",
+            onLeave: () => {
+                removeClassN(playBtn, 'is-playing');
+                elPlayer.pauseVideo();
+
+            },
+            onLeaveBack: () => {
+                removeClassN(playBtn, 'is-playing');
+                elPlayer.pauseVideo();
+                //console.log('leaveBack');
+
+            },
+            onEnterBack: () => {
+                removeClassN(playBtn, 'is-playing');
+                elPlayer.pauseVideo();
+                //console.log('enterBack');
+            }
+        });
+    });
+
+    const videoSections = $qall('.alp-video-section');
+
+    videoSections.forEach((sectionEl, index) => {
+
+        ScrollTrigger.create({
+            trigger:sectionEl,
+            start: "top 30%",
+            end: "bottom 100%",
+            //markers : true,
+            onLeave: () => {
+               stopOtherVideos();
+            },
+            onLeaveBack: () => {
+                stopOtherVideos();
+            },
+        });
+
+    });
+
+}
+
+export default videoControls;
