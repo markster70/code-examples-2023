@@ -1,10 +1,7 @@
+//  These are the DOM events used to trigger YT init
 
 
 
-
-
-
-12:02
 // dom ready
 window.addEventListener('DOMContentLoaded', () => {
 

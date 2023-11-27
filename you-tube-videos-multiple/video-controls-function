@@ -1,8 +1,12 @@
+// We import dependencies here 1st
+// I use my own DOM helpers with GSAP in this instance
+
 import { $q1, $qall,addClassN, removeClassN } from '@js/utility-scripts/domHelpers';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
+// We are going to be loading multiple player on page here
 function videoControls () {
     // array for the YT players to be pushed for later looping through to control playback
     let playersArray = [];
@@ -33,13 +37,15 @@ function videoControls () {
          }
     }
 
-    // we getall of the items here
+    // we get all of the items here
+    // change selector to what you need
     const videoItems = $qall('.alp-video-wrapper.has-video');
 
     // then loop through
     videoItems.forEach((videoWrapper, index) => {
 
         // set up the dom elements we need
+        // note selectors were specfic to use case, and will need to be changed
         const videoEl = $q1('.alp-yt-el', videoWrapper);
         const videoId = videoEl.parentNode.dataset.videoId;
         const playerId = videoEl.getAttribute('id');
@@ -54,6 +60,7 @@ function videoControls () {
             elPlayer.playVideo();
             addClassN(playBtn, 'is-playing');
         });
+
         // listen for state change on the player
         // if this is equal to 2 ( paused) - we make the faux play btn visible again
         elPlayer.addEventListener('onStateChange', (event) => {
@@ -62,6 +69,7 @@ function videoControls () {
                     }
          });
         // dropping a simple scroll trigger here - when we leave the element, we will pause the video again
+        // this is for the auto play / pause of videos as we scroll the page so as not to confuse a user
         ScrollTrigger.create({
             trigger: videoWrapper,
             //endTrigger : videoEl,
@@ -75,17 +83,17 @@ function videoControls () {
             onLeaveBack: () => {
                 removeClassN(playBtn, 'is-playing');
                 elPlayer.pauseVideo();
-                //console.log('leaveBack');
 
             },
             onEnterBack: () => {
                 removeClassN(playBtn, 'is-playing');
                 elPlayer.pauseVideo();
-                //console.log('enterBack');
+
             }
         });
     });
 
+    // select al of the video elements, and loop through them adding a scroll trigger
     const videoSections = $qall('.alp-video-section');
 
     videoSections.forEach((sectionEl, index) => {
