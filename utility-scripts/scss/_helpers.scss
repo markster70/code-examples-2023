@@ -1,0 +1,40 @@
+// THESE ARE THE CSS HELPER THAT WORK WITH CURRSCREENSIZE
+// APPLY THEM WITH YOUR OWN BREAK POINT MIXIN
+
+
+
+
+
+// small screen
+head {
+  font-size: 10px;
+  display: none;
+
+}
+
+
+@include breakpoint($bp-m) {
+  //midi screen
+  head {
+    font-size: 20px;
+    display: none;
+  }
+}
+
+
+@include breakpoint($bp-l) {
+  // large
+  head {
+    font-size: 30px;
+    display: none;
+  }
+}
+
+
+@include breakpoint($bp-xl) {
+  // xtra-large
+  head {
+    font-size: 40px;
+    display: none;
+  }
+}

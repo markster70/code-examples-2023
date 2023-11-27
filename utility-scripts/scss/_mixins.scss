@@ -1,0 +1,62 @@
+// SOME OF THE STANDARD MIXINS I MIGHT USE IN A PROJECT
+// THESE PAIR WITH THE _HELPERS PARTIAL TO MAKE SOME SENSE OF THE CURRSCREENSIZE FUNCTION IN DOMHELPERS.JS
+
+@mixin font-size($size) {
+
+  font-size: 0px + $size;
+  font-size: 0rem + $size / $base-font-size;
+}
+
+@mixin breakpoint($bp, $min-max: min-width) {
+
+  $em: $bp/$base-font-size;
+  @media(#{$min-max}: #{$em}em) { @content; }
+}
+
+// MIXIN FOR SMALL SCREEN LANDSCAPES
+@mixin ssLandscape() {
+  @media (max-device-width: 900px) and (orientation: landscape) {
+
+    @content;
+  }
+}
+
+
+// mixin to add common flex properties to element
+
+// usage @include flex-display(row: row, $wrap: no-wrap);
+
+@mixin flex-display($direction: row, $wrap : wrap) {
+
+  display: flex;
+  display: -ms-flexbox;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}
+
+
+// APPLY TRANSITIONS
+@mixin std-transitions($property:all, $speed: 300ms, $ease: ease 0s) {
+
+  -webkit-transition: $property $speed $ease;
+  -moz-transition: $property $speed $ease;
+  -o-transition: $property $speed $ease;
+  transition: $property $speed $ease;
+}
+
+// RESET A LIST TO DEFAULT STATE PRIOR TO APPLYING STYLES
+@mixin list-reset() {
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+// RESET A BUTTON TO INITIAL STATE PRIOR TO STYLING
+@mixin button-reset () {
+
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
